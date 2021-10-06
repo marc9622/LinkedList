@@ -5,7 +5,6 @@ import java.util.Random;
 class Main {
   static public void main(String[] args) {
 
-    
   }
 }
 
@@ -662,5 +661,185 @@ class Node<Type> {
 
   public String toString() {
     return value.toString();
+  }
+}
+
+class Queue<Type> {
+
+  Object[] array;
+  int rear, front, size, capacity;
+
+  Queue() {
+    capacity = 8;
+    array = new Object[capacity];
+    front = capacity;
+  }
+
+  Queue(int capacity) {
+    this.capacity = capacity;
+    array = new Object[capacity];
+    front = capacity;
+  }
+
+  void printAll() {
+    System.out.println(toString());
+  }
+
+  public String toStringInOrder() {
+    if(isEmpty())
+      return "";
+    String string = "";
+    if(rear < front)
+      for(int i = rear; i < front; i++)
+        string += "[" + array[i] + "]";
+    else
+      for(int i = rear; i < front + capacity; i++)
+        if(i < capacity)
+          string += "[" + array[i] + "]";
+        else
+          string += "[" + array[i - capacity] + "]";
+    return string;
+  }
+
+  public String toString() {
+    String string = "";
+    for(Object i : array)
+      string += "[" + i + "]";
+    return string;
+  }
+
+  void enqueue(Type value) {
+    if(isFull())
+      increaseCapacity();
+    size++;
+    rear--;
+    if(rear < 0)
+      rear += capacity;
+    array[rear] = value;
+  }
+
+  @SuppressWarnings("unchecked")
+  Type dequeue() {
+    if(isEmpty())
+      return null;
+    size--;
+    front--;
+    if(front < 0)
+      front += capacity;
+    Type value = (Type)array[front];
+    array[front] = null;
+    return value;
+  }
+
+  @SuppressWarnings("unchecked")
+  Type front() {
+    if(isEmpty())
+      return null;
+    return (Type)array[front];
+  }
+
+  void increaseCapacity() {
+    setCapacity(capacity * 2);
+  }
+
+  void setCapacity(int newCapacity) {
+    if(newCapacity <= capacity)
+      return;
+    Object[] newArray = new Object[newCapacity];
+    if(rear < front)
+      for(int i = rear; i < front; i++)
+        newArray[i] = array[i];
+    else
+      for(int i = rear; i < front + capacity; i++)
+        if(i < capacity)
+          newArray[i] = array[i];
+        else
+          newArray[i] = array[i - capacity];
+      front += capacity;
+    array = newArray;
+  }
+
+  int size() {
+    return size;
+  }
+
+  boolean isFull() {
+    return size == capacity;
+  }
+
+  boolean isEmpty() {
+    return size == 0;
+  }
+}
+
+class Stack<Type> {
+
+  Object[] array;
+  int front, capacity;
+
+  Stack() {
+    capacity = 8;
+    array = new Object[capacity];
+  }
+
+  Stack(int capacity) {
+    this.capacity = capacity;
+    array = new Object[capacity];
+  }
+
+  void printAll() {
+    System.out.println(toString());
+  }
+
+  public String toString() {
+    String string = "";
+    for(Object i : array)
+      string += "[" + i + "]";
+    return string;
+  }
+
+  void push(Type value) {
+    if(isFull())
+      increaseCapacity();
+    array[front] = value;
+    front++;
+  }
+
+  @SuppressWarnings("unchecked")
+  Type pop() {
+    if(isEmpty())
+      return null;
+    front--;
+    Type value = (Type)array[front];
+    array[front] = null;
+    return value;
+  }
+
+  @SuppressWarnings("unchecked")
+  Type peek() {
+    if(isEmpty())
+      return null;
+    return (Type)array[front];
+  }
+
+  void increaseCapacity() {
+    setCapacity(capacity * 2);
+  }
+
+  void setCapacity(int newCapacity) {
+    if(newCapacity <= capacity)
+      return;
+    Object[] newArray = new Object[newCapacity];
+    for(int i = 0; i <= front - 1; i++)
+      newArray[i] = array[i];
+    array = newArray;
+  }
+
+  boolean isFull() {
+    return front == capacity;
+  }
+
+  boolean isEmpty() {
+    return front == 0;
   }
 }
